@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hauck Dachdeckerei | Ihr Dach in besten Händen</title>
+  <style>
+    :root {
+      --main-red: #cc0000;
+      --light-gray: #f4f4f4;
+      --dark-gray: #333;
+      --white: #fff;
+      --dark-bg: #121212;
+      --dark-text: #e0e0e0;
+      --section1-bg: #fdf4f4;
+      --section2-bg: #f2f7f9;
+      --section3-bg: #fdf8ec;
+
+      --dark-section1: #1f1f1f;
+      --dark-section2: #2a2a2a;
+      --dark-section3: #1c1c1c;
+      --dark-section4: #252525;
+
+      /* Für das Kontaktformular */
+      --form-background: #fff;
+      --form-border: #ddd;
+      --form-border-focus: var(--main-red);
+      --form-input-background: #fafafa;
+      --form-input-text: #333;
+      --button-bg: var(--main-red);
+      --button-text: #fff;
+      --button-hover-bg: #b30000;
+
+      /* Variablen für die Navigationshöhe */
+      --nav-height-desktop: 64px; /* Jetzt fest auf 64px */
+    }
+
+    /* Dark mode spezifische Variablen für das Kontaktformular und Lightbox */
+    body.dark-mode {
+      --form-background: var(--dark-gray);
+      --form-border: #555;
+      --form-input-background: #2a2a2a;
+      --form-input-text: var(--dark-text);
+      --button-hover-bg: #990000;
+      --lightbox-bg: rgba(0, 0, 0, 0.85); /* Dunkleres Overlay im Dark Mode */
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--light-gray);
+      color: var(--dark-gray);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      transition: background-color 0.3s, color 0.3s;
+      scroll-padding-top: var(--nav-height-desktop); /* Standard für Desktop */
+    }
+
+    body.dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    header {
+      background: url('images/IMG_0468.JPEG') center/cover no-repeat;
+      height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+      text-align: center;
+      padding: 0 1rem;
+    }
+
+    header h1 {
+      font-size: 3rem;
+    }
+
+    nav {
+      background: var(--main-red);
+      padding: 0 1rem; /* Nur seitliches Padding */
+      height: 64px; /* Feste Höhe */
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: nowrap;
+      flex-direction: row;
+    }
+
+    /* Der Navigations-Header für mobile Ansicht (enthält Logo, Burger, Dark Toggle) */
+    .nav-header {
+      display: none; /* Standardmäßig versteckt auf Desktop */
+    }
+
+    nav img {
+      max-height: 100%; /* Passt sich der Höhe der Nav an */
+      padding: 0; /* Kein Padding */
+    }
+
+    /* Standard für Desktop: Navigationslinks, Burger-Menü versteckt */
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      flex: 1; /* Nimmt den verfügbaren Platz ein */
+    }
+
+    /* Burger-Menü Button */
+    .menu-toggle {
+      display: none; /* Standardmäßig versteckt auf Desktop */
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 2rem;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: bold;
+      border-bottom: 3px solid transparent;
+      transition: border-color 0.3s;
+      padding: 10px 0; /* Fügt Padding für bessere Klickbarkeit hinzu */
+    }
+
+    nav a.active {
+      border-color: var(--white);
+    }
+
+    .dark-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--white);
+      font-size: 1.2rem;
+    }
+
+    /* Styling für die Icon-Bilder */
+    .dark-toggle img {
+      width: 24px; /* Oder die gewünschte Größe */
+      height: 24px;
+      object-fit: contain;
+      vertical-align: middle; /* Für bessere Ausrichtung */
+      margin-right: 5px; /* Abstand zum Toggle */
+    }
+
+    .dark-toggle .light-icon {
+        display: inline-block; /* Standardmäßig sichtbar */
+    }
+
+    .dark-toggle .dark-icon {
+        display: none; /* Standardmäßig versteckt */
+    }
+
+    body.dark-mode .dark-toggle .light-icon {
+        display: none; /* Im Dark Mode Light-Icon verstecken */
+    }
+
+    body.dark-mode .dark-toggle .dark-icon {
+        display: inline-block; /* Im Dark Mode Dark-Icon anzeigen */
+    }
+
+    .dark-toggle input[type="checkbox"] {
+      width: 40px;
+      height: 20px;
+      appearance: none;
+      background: #fff;
+      border-radius: 20px;
+      position: relative;
+      cursor: pointer;
+      outline: none;
+      transition: background 0.3s;
+    }
+
+    .dark-toggle input[type="checkbox"]::before {
+      content: "";
+      width: 16px;
+      height: 16px;
+      background: #333;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s;
+    }
+
+    .dark-toggle input[type="checkbox"]:checked::before {
+      transform: translateX(20px);
+    }
+
+    section {
+      max-width: 1300px;
+      margin: auto;
+      padding: 4rem 2rem;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    #ueber-uns {
+      background-color: var(--section1-bg);
+    }
+
+    #leistungen {
+      background-color: var(--section2-bg);
+    }
+
+    #galerie {
+      background-color: var(--light-gray);
+    }
+
+    #kontakt {
+      background-color: var(--section3-bg);
+    }
+
+    body.dark-mode #ueber-uns {
+      background-color: var(--dark-section1);
+    }
+
+    body.dark-mode #leistungen {
+      background-color: var(--dark-section2);
+    }
+
+    body.dark-mode #galerie {
+      background-color: var(--dark-section3);
+    }
+
+    body.dark-mode #kontakt {
+      background-color: var(--dark-section4);
+    }
+
+    .section-title {
+      font-size: 2rem;
+      color: var(--main-red);
+      margin-bottom: 1rem;
+    }
+
+    .highlight {
+      color: var(--main-red);
+      font-weight: bold;
+    }
+
+    ul {
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Styling for the new flex container in #leistungen */
+    .leistungen-content {
+      display: flex;
+      flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+      gap: 40px; /* Space between the two columns */
+      justify-content: space-between; /* Distributes space between items */
+    }
+
+    .leistungen-column {
+      flex: 1; /* Each column takes equal space */
+      min-width: 300px; /* Minimum width before wrapping */
+    }
+
+
+    .cta {
+      background: var(--main-red);
+      color: var(--white);
+      display: inline-block;
+      padding: 0.8rem 1.5rem;
+      text-decoration: none;
+      margin-top: 1rem;
+      border-radius: 5px;
+    }
+
+    /* Modernes Kontaktformular Styling */
+    .contact-form {
+      background-color: var(--form-background);
+      padding: 30px 40px;
+      max-width: 600px;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .contact-form .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .contact-form label {
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--dark-gray);
+      transition: color 0.3s;
+    }
+
+    body.dark-mode .contact-form label {
+      color: var(--dark-text);
+    }
+
+    .contact-form input[type="text"],
+    .contact-form input[type="email"],
+    .contact-form input[type="tel"],
+    .contact-form textarea {
+      padding: 14px 18px;
+      border: 1.8px solid var(--form-border);
+      border-radius: 8px;
+      background-color: var(--form-input-background);
+      color: var(--form-input-text);
+      font-size: 1rem;
+      font-weight: 400;
+      transition: border-color 0.3s ease, background-color 0.3s ease;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 48px;
+    }
+
+    .contact-form textarea {
+      min-height: 120px;
+    }
+
+    .contact-form input[type="text"]:focus,
+    .contact-form input[type="email"]:focus,
+    .contact-form input[type="tel"]:focus,
+    .contact-form textarea:focus {
+      border-color: var(--form-border-focus);
+      background-color: var(--white);
+      outline: none;
+      box-shadow: 0 0 6px var(--main-red);
+    }
+
+    body.dark-mode .contact-form input[type="text"]:focus,
+    body.dark-mode .contact-form input[type="email"]:focus,
+    body.dark-mode .contact-form input[type="tel"]:focus,
+    body.dark-mode .contact-form textarea:focus {
+      background-color: var(--dark-section3);
+    }
+
+    .contact-form button {
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      padding: 14px 25px;
+      border-radius: 10px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      cursor: pointer;
+      align-self: flex-start;
+      box-shadow: 0 4px 14px rgba(204, 0, 0, 0.4);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .contact-form button:hover {
+      background-color: var(--button-hover-bg);
+      box-shadow: 0 6px 20px rgba(179, 0, 0, 0.7);
+    }
+
+    /* Bestätigungsnachricht */
+    .confirmation-message {
+        display: none; /* Standardmäßig versteckt */
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 20px;
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
+    body.dark-mode .confirmation-message {
+        background-color: #28a745; /* Dunkelgrün für Dark Mode */
+        color: #fff;
+        border-color: #218838;
+    }
+
+    /* GALERIE STYLES */
+    .gallery-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      max-width: 300px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer; /* Zeigt an, dass das Bild klickbar ist */
+    }
+
+    .gallery-grid img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    }
+
+    /* Lightbox Styles */
+    .lightbox-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7); /* Halbdurchsichtiges Schwarz */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000; /* Über allem anderen */
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    body.dark-mode .lightbox-overlay {
+      background-color: var(--lightbox-bg); /* Dunkleres Overlay im Dark Mode */
+    }
+
+    .lightbox-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-content {
+      position: relative;
+      background-color: var(--white); /* Hintergrund des Modals */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      max-width: 90%;
+      max-height: 90%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column; /* Für Titel und Bild untereinander */
+    }
+
+    body.dark-mode .lightbox-content {
+        background-color: var(--dark-section2); /* Dunkler Hintergrund im Dark Mode */
+        color: var(--dark-text);
+    }
+
+    .lightbox-content img {
+      max-width: 100%;
+      max-height: 80vh; /* Maximale Höhe des Bildes im Modal */
+      display: block;
+      margin: 0 auto 15px auto; /* Abstand zum Titel */
+      border-radius: 5px;
+    }
+
+    .lightbox-caption {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--dark-gray);
+      text-align: center;
+    }
+
+    body.dark-mode .lightbox-caption {
+        color: var(--dark-text);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 2.5rem;
+      color: var(--dark-gray);
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.2s ease;
+    }
+
+    body.dark-mode .lightbox-close {
+        color: var(--dark-text);
+    }
+
+    .lightbox-close:hover {
+      color: var(--main-red);
+    }
+
+    /* Responsive Anpassungen für die Galerie */
+    @media (min-width: 600px) {
+      .gallery-grid img {
+        flex: 1 1 calc(50% - 15px);
+      }
+    }
+
+    @media (min-width: 900px) {
+      .gallery-grid img {
+        flex: 1 1 calc(33.333% - 15px);
+      }
+    }
+
+    footer {
+      background: var(--dark-gray);
+      color: var(--white);
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    footer p, footer a {
+      margin: 0.5rem 0;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .spacer {
+      height: 1rem; /* oder 16px, 2em etc. */
+    }
+
+
+    /* Responsive Anpassungen für die Navigation (Mobile/Tablet und kleine Fenster) */
+    @media(max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      nav {
+        flex-direction: column; /* Elemente vertikal stapeln */
+        align-items: flex-start; /* Links obenbündig */
+        height: auto; /* Höhe im mobilen Modus dynamisch, da Navi ausklappt */
+        min-height: auto;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      /* Desktop Elemente verstecken */
+      nav > .desktop-logo, nav > .dark-toggle.desktop-toggle, nav > .nav-links {
+        display: none;
+      }
+
+      /* Den neuen Navigations-Header anzeigen */
+      .nav-header {
+        display: flex; /* Logo, Burger, Dark Toggle nebeneinander */
+        justify-content: space-between; /* Elemente verteilen */
+        align-items: center;
+        width: 100%;
+        height: 64px; /* Feste Höhe für den Header */
+        padding: 0 1rem; /* Seitliches Padding für den Headerbereich */
+      }
+
+      .nav-header img { /* Logo im Header */
+        max-height: 100%; /* Passt sich der Höhe des Headers an */
+        padding: 0; /* Kein zusätzliches Padding hier */
+      }
+
+      /* Burger-Menü Button anzeigen und in die Mitte verschieben */
+      .menu-toggle {
+        display: block; /* Zeigt den Burger-Button im mobilen Modus */
+        order: 2; /* Zwischen Logo und Dark Toggle */
+        margin: 0 auto; /* Zentriert es horizontal */
+      }
+
+      /* Dark Mode Toggle im Mobile Header anzeigen und nach rechts verschieben */
+      .nav-header .dark-toggle {
+        display: flex; /* Sicherstellen, dass es sichtbar ist */
+        order: 3; /* Ganz rechts */
+        margin-left: auto; /* Schiebt es an den rechten Rand */
+      }
+
+      .nav-links {
+        flex-direction: column; /* Links untereinander */
+        width: 100%;
+        text-align: center;
+        display: none; /* Standardmäßig versteckt im mobilen Modus */
+        padding-top: 1rem;
+        padding-bottom: 1rem; /* Fügt Padding hinzu */
+        border-top: 1px solid rgba(255, 255, 255, 0.2); /* Trennlinie */
+      }
+
+      .nav-links.active {
+        display: flex; /* Angezeigt, wenn aktiv */
+      }
+
+      nav a {
+        margin: 0.5rem 0; /* Vertikaler Abstand zwischen Links */
+        width: 100%; /* Links nehmen volle Breite ein */
+        padding: 0.5rem 0; /* Vertikales Padding */
+      }
+
+      body {
+          /* Passe scroll-padding-top an die feste Höhe des .nav-header an */
+          scroll-padding-top: 64px;
+      }
+
+      /* Stack columns on small screens */
+      .leistungen-content {
+        flex-direction: column;
+        gap: 20px; /* Adjust gap for stacked layout */
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Hauck Dachdeckerei - Ihr Dach in besten Händen</h1>
+  </header>
+
+  <nav>
+    <div class="nav-header"> <img src="images/logo.png" alt="Hauck Dachdeckerei Logo" />
+      <button class="menu-toggle" aria-label="Menü öffnen/schließen">&#9776;</button>
+      <label class="dark-toggle" for="darkmode-toggle" title="Dunkelmodus umschalten">
+        <img src="images/light_icon.png" alt="Light Mode Icon" class="light-icon" />
+        <img src="images/dark_icon.png" alt="Dark Mode Icon" class="dark-icon" />
+        <input type="checkbox" id="darkmode-toggle" />
+      </label>
+    </div>
+
+    <img src="images/logo.png" alt="Hauck Dachdeckerei Logo" class="desktop-logo" />
+    <div class="nav-links">
+      <a href="#ueber-uns">Über uns</a>
+      <a href="#leistungen">Leistungen</a>
+      <a href="#galerie">Galerie</a>
+      <a href="#kontakt">Kontakt</a>
+    </div>
+    
+    <label class="dark-toggle desktop-toggle" for="darkmode-toggle-desktop" title="Dunkelmodus umschalten">
+      <img src="images/light_icon.png" alt="Light Mode Icon" class="light-icon" />
+      <img src="images/dark_icon.png" alt="Dark Mode Icon" class="dark-icon" />
+      <input type="checkbox" id="darkmode-toggle-desktop" />
+    </label>
+  </nav>
+
+  <section id="ueber-uns">
+    <h2 class="section-title">Über uns</h2>
+    <p><strong>Hauck Dachdeckerei – Kompetenz seit 1998</strong></p>
+    <p>Seit über 25 Jahren stehen wir für zuverlässige, saubere und fachgerechte Arbeit rund ums Dach. Gegründet von Xhef Hauck in Nürnberg, vereinen wir traditionelle Handwerkskunst mit modernem Know-how.</p>
+    <p>Ob Dachdeckung, Flaschnerarbeiten oder Dämmung – wir beraten Sie individuell, transparent und auf Augenhöhe. Unser eingespieltes Team aus 5 bis 10 erfahrenen Fachkräften richtet sich flexibel nach den Anforderungen Ihres Projekts – vom kleinen Reparaturauftrag bis zur kompletten Dachsanierung.</p>
+    <p>Qualität, Zuverlässigkeit und Kundenzufriedenheit stehen bei uns an erster Stelle.</p>
+  </section>
+
+  <section id="leistungen">
+    <h2 class="section-title">Unsere Leistungen</h2>
+    <div class="leistungen-content">
+      <div class="leistungen-column">
+        <h3>Services</h3>
+        <ul>
+          <li>Eindeckung mit Ziegeln, Schiefer & Bitumen</li>
+          <li>Dachreparaturen und Sanierungen</li>
+          <li>Wartung und Inspektion</li>
+          <li>Dachbegrünung</li>
+        </ul>
+      </div>
+      <div class="leistungen-column">
+        <h3>Was uns auszeichnet:</h3>
+        <ul>
+          <li>Persönliche Beratung & maßgeschneiderte Lösungen</li>
+          <li>Saubere, termingerechte Ausführung</li>
+          <li>Höchste handwerkliche Qualität</li>
+          <li>Faire, unverbindliche Angebote</li>
+        </ul>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <p>Sie möchten mit uns Ihr Projekt besprechen?</p>
+    <p>Dann kontaktieren Sie uns gerne über das Kontaktformular oder rufen Sie uns direkt an – wir freuen uns auf Ihre Anfrage!</p>
+    <p>Unser Anspruch: Wir sind erst zufrieden, wenn Sie es sind.</p>
+    <div class="spacer"></div>
+
+    <a href="#kontakt" class="cta">Jetzt Kontakt aufnehmen</a>
+  </section>
+
+  <section id="galerie">
+    <h2 class="section-title">Galerie</h2>
+    <p>Sehen Sie sich einige unserer abgeschlossenen Projekte an.</p>
+    <div class="gallery-grid">
+      <img src="images/1.jpg" alt="Ein saniertes Ziegeldach" />
+      <img src="images/2.jpg" alt="Detailaufnahme eines Schieferdachs" />
+      <img src="images/3.jpg" alt="Installation von Solarpaneelen auf einem Dach" />
+      <img src="images/4.jpg" alt="Dachbegrünung im städtischen Umfeld" />
+      <img src="images/5.jpg" alt="Großes Flachdach mit Bitumenabdichtung" />
+      <img src="images/6.jpg" alt="Reparaturarbeiten an einem alten Kirchendach" />
+      <img src="images/7.jpg" alt="Neubau mit modernem Metalldach" />
+      <img src="images/8.jpg" alt="Dachinspektion mit Drohne" />
+      <img src="images/9.jpg" alt="Herbstliche Dachlandschaft" />
+      <img src="images/10.jpg" alt="Team bei der Arbeit auf einem Dach" />
+    </div>
+  </section>
+
+  <section id="kontakt">
+    <h2 class="section-title">Kontakt</h2>
+    <form class="contact-form" id="contactForm" action="#" method="POST" novalidate>
+      <div class="form-group">
+        <label for="name">Name *</label>
+        <input type="text" id="name" name="name" placeholder="Ihr Name" required />
+      </div>
+      <div class="form-group">
+        <label for="email">E-Mail *</label>
+        <input type="email" id="email" name="email" placeholder="Ihre E-Mail-Adresse" required />
+      </div>
+      <div class="form-group">
+        <label for="telefon">Telefon</label>
+        <input type="tel" id="telefon" name="telefon" placeholder="Ihre Telefonnummer" />
+      </div>
+      <div class="form-group">
+        <label for="nachricht">Nachricht *</label>
+        <textarea id="nachricht" name="nachricht" placeholder="Ihre Nachricht" required></textarea>
+      </div>
+      <button type="submit">Absenden</button>
+    </form>
+    <div class="confirmation-message" id="confirmationMessage">
+      Vielen Dank für Ihre Nachricht! Wir werden uns in Kürze bei Ihnen melden.
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Hauck Dachdeckerei. Alle Rechte vorbehalten.</p>
+    <p><a href="mailto:info@hauck-dachdeckerei.de">info@hauck-dachdeckerei.de</a> | Tel: 0123 4567890</p>
+  </footer>
+
+  <div class="lightbox-overlay" id="lightboxOverlay">
+    <div class="lightbox-content">
+      <span class="lightbox-close" id="lightboxClose">&times;</span>
+      <img src="" alt="" id="lightboxImage" />
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+  </div>
+
+  <script>
+    const toggle = document.getElementById('darkmode-toggle'); // Mobile toggle
+    const toggleDesktop = document.getElementById('darkmode-toggle-desktop'); // Desktop toggle
+
+    const lightboxOverlay = document.getElementById('lightboxOverlay');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const galleryImages = document.querySelectorAll('.gallery-grid img');
+    const contactForm = document.getElementById('contactForm');
+    const confirmationMessage = document.getElementById('confirmationMessage');
+    const contactSection = document.getElementById('kontakt');
+
+    const navLinksContainer = document.querySelector('.nav-links');
+    const menuToggle = document.querySelector('.menu-toggle');
+
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const sections = document.querySelectorAll('section');
+
+    // Dark Mode Umschaltung für beide Toggles
+    function applyDarkMode(isChecked) {
+      document.body.classList.toggle('dark-mode', isChecked);
+      localStorage.setItem('darkMode', isChecked);
+      // Synchronisiere beide Toggles, falls sie existieren
+      if (toggle) toggle.checked = isChecked;
+      if (toggleDesktop) toggleDesktop.checked = isChecked;
+    }
+
+    // Event Listener für beide Toggles
+    if (toggle) {
+        toggle.addEventListener('change', () => applyDarkMode(toggle.checked));
+    }
+    if (toggleDesktop) {
+        toggleDesktop.addEventListener('change', () => applyDarkMode(toggleDesktop.checked));
+    }
+
+    // Zustand aus localStorage laden beim Initialisieren
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (savedDarkMode) {
+      applyDarkMode(true);
+    } else {
+      // Stelle sicher, dass die Toggles korrekt gesetzt sind, wenn kein Dark Mode aktiv ist
+      if (toggle) toggle.checked = false;
+      if (toggleDesktop) toggleDesktop.checked = false;
+    }
+
+
+    // Lightbox Funktionalität
+    galleryImages.forEach(image => {
+      image.addEventListener('click', () => {
+        lightboxOverlay.classList.add('active');
+        lightboxImage.src = image.src;
+        lightboxImage.alt = image.alt;
+        lightboxCaption.textContent = image.alt;
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // Lightbox schließen
+    lightboxClose.addEventListener('click', () => {
+      lightboxOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+
+    lightboxOverlay.addEventListener('click', (e) => {
+      if (e.target === lightboxOverlay) {
+        lightboxOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightboxOverlay.classList.contains('active')) {
+        lightboxOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Formular-Absende-Logik
+    contactForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      contactForm.reset();
+      contactForm.style.display = 'none';
+      confirmationMessage.style.display = 'block';
+
+      // Die Höhe der Navigation kann variieren, daher dynamisch abfragen
+      const navElement = document.querySelector('nav');
+      const navHeight = navElement.offsetHeight;
+      window.scrollTo({
+        top: contactSection.offsetTop - navHeight,
+        behavior: 'smooth'
+      });
+
+      setTimeout(() => {
+        confirmationMessage.style.display = 'none';
+        contactForm.style.display = 'flex';
+      }, 7000);
+    });
+
+    // Funktion zum Setzen der aktiven Navigationsklasse
+    function setActiveNavLink() {
+        let currentSectionId = '';
+        const navElement = document.querySelector('nav');
+        // Holen der aktuellen Navigationshöhe, um den Scroll-Offset korrekt zu berechnen
+        // Im mobilen Modus ist die Höhe des .nav-header relevant
+        const navHeight = window.innerWidth <= 768 ? document.querySelector('.nav-header').offsetHeight : navElement.offsetHeight;
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - navHeight - 1; // -1 für eine kleine Toleranz
+            const sectionBottom = sectionTop + section.offsetHeight;
+
+            if (window.scrollY >= sectionTop && window.scrollY < sectionBottom) {
+                currentSectionId = section.id;
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + currentSectionId) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    // Event Listener für Scrollen
+    window.addEventListener('scroll', setActiveNavLink);
+
+    // Klick-Handler für Navigationslinks: Active-Status aktualisieren und Menü schließen
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            // Entferne aktive Klasse von allen Links und füge sie dem geklickten Link hinzu
+            navLinks.forEach(l => l.classList.remove('active'));
+            e.target.classList.add('active');
+
+            // Menü schließen, wenn ein Link geklickt wird (im mobilen Modus)
+            // Prüfen, ob der Burger-Button sichtbar ist (d.h. wir sind im mobilen Layout)
+            if (window.getComputedStyle(menuToggle).display === 'block') {
+              navLinksContainer.classList.remove('active');
+              handleNavDisplay(); // Aktualisiert die Display-Eigenschaft
+            }
+        });
+    });
+
+    // Burgermenü Toggle Funktionalität
+    menuToggle.addEventListener('click', (event) => {
+      event.stopPropagation(); // Verhindert, dass der Klick zum document weitergegeben wird
+      navLinksContainer.classList.toggle('active'); // Fügt/Entfernt die 'active' Klasse
+      handleNavDisplay(); // Ruft handleNavDisplay auf, um die Sichtbarkeit sofort anzupit
+    });
+
+    // Schließt das Menü, wenn außerhalb geklickt wird
+    document.addEventListener('click', (event) => {
+      // Prüfen, ob der Klick nicht auf das Burger-Menü-Icon und nicht innerhalb des aufgeklappten Navigationsbereichs erfolgte
+      if (
+        window.getComputedStyle(menuToggle).display === 'block' && // Nur im mobilen Modus
+        !menuToggle.contains(event.target) &&
+        !navLinksContainer.contains(event.target) &&
+        navLinksContainer.classList.contains('active')
+      ) {
+        navLinksContainer.classList.remove('active');
+        handleNavDisplay(); // Aktualisiert die Display-Eigenschaft
+      }
+    });
+
+    // Initialer Aufruf beim Laden der Seite und beim Resize, um den Zustand richtig zu setzen
+    function handleNavDisplay() {
+      // Zugriff auf den Desktop-Toggle, der jetzt eine eigene ID hat
+      const desktopToggle = document.querySelector('.dark-toggle.desktop-toggle');
+      const desktopLogo = document.querySelector('.desktop-logo');
+      const navHeader = document.querySelector('.nav-header');
+
+      if (window.innerWidth > 768) {
+        // Desktop-Ansicht: Elemente für Desktop sichtbar, Mobile-Header versteckt
+        navLinksContainer.style.display = 'flex';
+        navLinksContainer.classList.remove('active'); // Sicherstellen, dass die 'active' Klasse entfernt ist
+
+        if (desktopLogo) desktopLogo.style.display = 'block';
+        if (desktopToggle) desktopToggle.style.display = 'flex';
+        if (navHeader) navHeader.style.display = 'none';
+
+      } else {
+        // Mobile-Ansicht: Mobile-Header sichtbar, Desktop-Elemente versteckt
+        if (desktopLogo) desktopLogo.style.display = 'none';
+        if (desktopToggle) desktopToggle.style.display = 'none';
+        if (navHeader) navHeader.style.display = 'flex';
+
+        // Die Navigationslinks sind nur sichtbar, wenn die 'active' Klasse vorhanden ist
+        if (navLinksContainer.classList.contains('active')) {
+          navLinksContainer.style.display = 'flex';
+        } else {
+          navLinksContainer.style.display = 'none';
+        }
+      }
+      setActiveNavLink(); // Aktualisiert den aktiven Navigationslink basierend auf der aktuellen Scroll-Position
+    }
+
+    // Beim Laden der Seite
+    document.addEventListener('DOMContentLoaded', handleNavDisplay);
+    // Beim Ändern der Fenstergröße
+    window.addEventListener('resize', handleNavDisplay);
+
+  </script>
+</body>
+</html>
